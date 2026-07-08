@@ -39,8 +39,8 @@ public sealed class GetAccountsQueryHandler(FestpayContext dbContext) : IRequest
                 a.Name,
                 a.Document,
                 a.Email,
-                a.CreatedUtc,
                 a.Phone,
+                a.CreatedUtc,
                 a.DeactivatedUtc,
                 a.Balance
             ))
