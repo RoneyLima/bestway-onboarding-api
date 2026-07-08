@@ -5,4 +5,4 @@ GET {{host}}/api/v1/accounts
 
 ###
 
-GET {{host}}/weatherforecast
+PATCH {{host}}/api/v1/accounts/e1638cdc-3177-4d5a-8b0e-cb9af718b815
