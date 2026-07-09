@@ -63,3 +63,41 @@ public class InvalidHourlyRateException(decimal hourlyRate)
 {
     public decimal HourlyRate { get; } = hourlyRate;
 }
+
+public class InvalidTransactionAmountException(decimal amount)
+    : DomainException(
+        $"The transaction amount '{amount}' must be greater than zero.",
+        nameof(amount)
+    )
+{
+    public decimal Amount { get; } = amount;
+}
+
+public class SameAccountTransactionException(Guid originAccountId, Guid destinationAccountId)
+    : DomainException(
+        "Origin account and destination account must be different.",
+        nameof(originAccountId)
+    )
+{
+    public Guid OriginAccountId { get; } = originAccountId;
+    public Guid DestinationAccountId { get; } = destinationAccountId;
+}
+
+public class TransactionAlreadyCanceledException(Guid transactionId)
+    : DomainException(
+        $"The transaction '{transactionId}' is already canceled.",
+        nameof(transactionId)
+    )
+{
+    public Guid TransactionId { get; } = transactionId;
+}
+
+public class InsufficientBalanceException(decimal balance, decimal amount)
+    : DomainException(
+        $"The balance '{balance}' is insufficient for the amount '{amount}'.",
+        nameof(balance)
+    )
+{
+    public decimal Balance { get; } = balance;
+    public decimal Amount { get; } = amount;
+}

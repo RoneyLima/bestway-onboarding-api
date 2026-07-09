@@ -31,7 +31,7 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddProblemDetails();
-builder.Services.AddCarter();
+builder.Services.AddCarterModules(typeof(AppModules).Assembly);
 
 AppModules.AddApplication(builder.Services);
 builder.Services.AddDatabase();

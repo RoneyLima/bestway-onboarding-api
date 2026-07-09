@@ -1,3 +1,5 @@
+using System.Reflection;
+using Carter;
 using Festpay.Onboarding.Infra.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +25,17 @@ public static class DependencyInjection
     public static void AddSwagger(this IServiceCollection services, IConfiguration config)
     {
         services.AddSwaggerGen(c => c.LoadOpenApiOptions());
+    }
+
+    public static void AddCarterModules(this IServiceCollection services, Assembly applicationAssembly)
+    {
+        services.AddCarter(configurator: configurator =>
+        {
+            var moduleTypes = applicationAssembly.GetTypes()
+                .Where(t => !t.IsAbstract && typeof(ICarterModule).IsAssignableFrom(t));
+
+            configurator.WithModules(moduleTypes.ToArray());
+        });
     }
 
     private static void LoadOpenApiOptions(this SwaggerGenOptions options)

@@ -7,6 +7,7 @@ namespace Festpay.Onboarding.Infra.Context;
 public class FestpayContext(DbContextOptions<FestpayContext> options) : DbContext(options)
 {
     public DbSet<Account> Accounts { get; init; }
+    public DbSet<Transaction> Transactions { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -1,0 +1,134 @@
+@Api_HostAddress = https://localhost:7266
+@originAccountId = 4aa5fad7-a03c-4b59-a00d-fc0e0fe7374b
+@destinationAccountId = 73fd7027-1677-457f-b7c3-e3d9476795e4
+# @transactionId = 00000000-0000-0000-0000-000000000000
+@transactionId = c5e08a3f-8b21-45e2-9538-de76a9c812fb
+
+### Health check basico
+GET {{Api_HostAddress}}/openapi/v1.json
+Accept: application/json
+
+### Conta de origem - massa de teste
+POST {{Api_HostAddress}}/api/v1/accounts
+Content-Type: application/json
+
+{
+  "name": "Conta Origem Teste",
+  "document": "16670073607",
+  "email": "origem.teste@festpay.com",
+  "phone": "11999999999"
+}
+
+### Conta de destino - massa de teste
+POST {{Api_HostAddress}}/api/v1/accounts
+Content-Type: application/json
+
+{
+  "name": "Conta Destino Teste",
+  "document": "39053344705",
+  "email": "destino.teste@festpay.com",
+  "phone": "11988888888"
+}
+
+### Listar contas para copiar os ids gerados
+GET {{Api_HostAddress}}/api/v1/accounts
+Accept: application/json
+
+### Desativar ou reativar conta por id
+PATCH {{Api_HostAddress}}/api/v1/accounts/{{originAccountId}}
+Accept: application/json
+
+### Carregar saldo da conta de origem (Charge)
+POST {{Api_HostAddress}}/api/v1/accounts/{{originAccountId}}/charge
+Content-Type: application/json
+
+{
+  "amount": 50.00
+}
+
+### Carregar saldo da conta de destino (Charge)
+POST {{Api_HostAddress}}/api/v1/accounts/{{destinationAccountId}}/charge
+Content-Type: application/json
+
+{
+  "amount": 200.00
+}
+
+### Criar transacao - massa happy path
+POST {{Api_HostAddress}}/api/v1/transactions
+Content-Type: application/json
+
+{
+  "originAccountId": "{{originAccountId}}",
+  "destinationAccountId": "{{destinationAccountId}}",
+  "amount": 75.25
+}
+
+### Criar transacao duplicada (Anti-duplicidade) - deve falhar por 5 minutos
+POST {{Api_HostAddress}}/api/v1/transactions
+Content-Type: application/json
+
+{
+  "originAccountId": "{{originAccountId}}",
+  "destinationAccountId": "{{destinationAccountId}}",
+  "amount": 75.25
+}
+
+
+### Criar transacao com valor decimal alternativo
+POST {{Api_HostAddress}}/api/v1/transactions
+Content-Type: application/json
+
+{
+  "originAccountId": "{{originAccountId}}",
+  "destinationAccountId": "{{destinationAccountId}}",
+  "amount": 10.50
+}
+
+### Criar transacao invalida - mesma conta
+POST {{Api_HostAddress}}/api/v1/transactions
+Content-Type: application/json
+
+{
+  "originAccountId": "{{originAccountId}}",
+  "destinationAccountId": "{{originAccountId}}",
+  "amount": 10
+}
+
+### Criar transacao invalida - saldo insuficiente
+POST {{Api_HostAddress}}/api/v1/transactions
+Content-Type: application/json
+
+{
+  "originAccountId": "{{originAccountId}}",
+  "destinationAccountId": "{{destinationAccountId}}",
+  "amount": 999999.99
+}
+
+### Listar transacoes
+GET {{Api_HostAddress}}/api/v1/transactions
+Accept: application/json
+
+### Buscar transacao por id
+GET {{Api_HostAddress}}/api/v1/transactions/{{transactionId}}
+Accept: application/json
+
+### Cancelar transacao por id
+PATCH {{Api_HostAddress}}/api/v1/transactions/{{transactionId}}/cancel
+Accept: application/json
+
+### Cancelar novamente para validar bloqueio de duplicidade
+PATCH {{Api_HostAddress}}/api/v1/transactions/{{transactionId}}/cancel
+Accept: application/json
+
+### Buscar transacao cancelada por id
+GET {{Api_HostAddress}}/api/v1/transactions/{{transactionId}}
+Accept: application/json
+
+### Listar transacoes apos cancelamento
+GET {{Api_HostAddress}}/api/v1/transactions
+Accept: application/json
+
+### Consultar id inexistente
+GET {{Api_HostAddress}}/api/v1/transactions/11111111-1111-1111-1111-111111111111
+Accept: application/json
