@@ -48,20 +48,13 @@ Deverá ser desenvolvido métodos para:
 
 ### Feature: Adicionando endpoint de Transações entre Contas
 
-- adicionadas regras de dominio para valor maior que zero, bloqueio de transacao entre a mesma conta e bloqueio de cancelamento duplicado
-- adicionadas operacoes de credito e debito em `Account`
-- adicionada excecao de saldo insuficiente
-- adicionada persistencia de `Transaction` no `FestpayContext`
-- adicionada configuracao EF Core da entidade `Transaction`
-- adicionada migration para criacao da tabela de transacoes
-- adicionados endpoints:
-  - `POST /api/v1/transactions`
-  - `PATCH /api/v1/transactions/{id}/cancel`
-  - `GET /api/v1/transactions`
-  - `GET /api/v1/transactions/{id}`
-- adicionados testes de aplicacao para criacao, cancelamento, listagem e busca por id
-- adicionados testes de dominio para `Transaction` e para operacoes de saldo em `Account`
-- atualizado o arquivo [Festpay.Onboarding.Api.http](/abs/path/D:/Code/bestway-onboarding-api/Festpay.Onboarding.Api/Festpay.Onboarding.Api.http) com massa de teste manual para contas e transacoes
+  - Adicionado suporte à realização de cargas em contas ativas.
+  - O saldo é atualizado automaticamente após uma carga bem-sucedida.
+  - Cargas com valores iguais ou inferiores a zero são rejeitadas.
+  - Contas inativas não podem receber cargas.
+  - Tentativas de carga em contas inexistentes retornam uma mensagem de erro apropriada.
+  - Novos testes unitários garantem os principais cenários de sucesso e validação.
+  
 ---
 ## Tecnologias Utilizadas
 
